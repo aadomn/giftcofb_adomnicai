@@ -383,6 +383,9 @@ void combine_shares_decrypt(
     shares_to_bytearr(m, ms, mlen);
 }
 
+/*
+ * Main encryption/authentication function.
+ */
 int crypto_aead_encrypt_shared(
     mask_c_uint32_t* cs, unsigned long long *clen,
     const mask_m_uint32_t *ms, unsigned long long mlen,
@@ -395,15 +398,7 @@ int crypto_aead_encrypt_shared(
     shares_to_bytearr_2(key, key_m, ks);
 
     *clen = mlen + TAG_SIZE;
-/*
-    return giftcofb_crypt(
-        (uint8_t *)(cs[0].shares),
-        key, key_m,
-        (uint8_t *)(npubs[0].shares),
-        (uint8_t *)(ads[0].shares), adlen,
-        (uint8_t *)(ms[0].shares), mlen,
-        COFB_ENCRYPT);
-        */
+
     return giftcofb_crypt(
         (uint8_t *)(cs),
         key, key_m,
@@ -413,6 +408,9 @@ int crypto_aead_encrypt_shared(
         COFB_ENCRYPT);
 }
 
+/*
+ * Main decryption/tag verification function.
+ */
 int crypto_aead_decrypt_shared(
     mask_m_uint32_t* ms, unsigned long long *mlen,
     const mask_c_uint32_t *cs, unsigned long long clen,
